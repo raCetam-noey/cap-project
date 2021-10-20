@@ -1,0 +1,36 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core">
+   <ViewSettingsDialog
+      id="filter"
+      confirm=".onConfirmOrderDialog"
+      sortDescending="true"
+      groupDescending="true"
+      title="정렬">
+      <sortItems>
+         <ViewSettingsItem text="ID" key="ID" selected="true"/>
+         <ViewSettingsItem text="Author" key="name"/>
+         <ViewSettingsItem text="Author_ID" key="author_ID"/>
+         <ViewSettingsItem text="stock" key="stock"/>
+         <ViewSettingsItem text="title" key="title"/>
+      </sortItems>
+      <filterItems>
+         <!-- <ViewSettingsFilterItem text="ID" key="ID" >
+            <items>
+               <ViewSettingsItem text="101" key="ID___EQ___101___X" />
+               <ViewSettingsItem text="107" key="ID___EQ___107___X" />
+               <ViewSettingsItem text="150" key="ID___EQ___150___X" />
+               <ViewSettingsItem text="170" key="ID___EQ___170___X" />
+            </items>
+         </ViewSettingsFilterItem> -->
+         <ViewSettingsFilterItem text="Author" key="name" >
+            <items>
+               <ViewSettingsItem text="Emily" key="name___EQ___Emily Brontë___X" />
+               <ViewSettingsItem text="Charlote" key="name___EQ___Charlote Brontë___X" />
+               <ViewSettingsItem text="Edgar" key="name___EQ___Edgar Allen Poe___X" />
+               <ViewSettingsItem text="Richard" key="name___EQ___Richard Carpenter___X" />
+            </items>
+         </ViewSettingsFilterItem>
+      </filterItems>
+   </ViewSettingsDialog>
+</core:FragmentDefinition>
