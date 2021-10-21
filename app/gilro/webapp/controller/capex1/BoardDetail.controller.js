@@ -76,7 +76,7 @@ sap.ui.define([
                 // modules.log("selectList");
                 //select 라는 함수를 호출해서 매개변수로 해서 string의 값으로 넣는다
                 
-                let list = await this.select("/catalog/Books");
+                let list = await this.select("/catalog/Books?$expand=author");
                 modules.dir(list, "list");
                 console.log(list.value);
                 let oArray = list.value;
@@ -104,22 +104,20 @@ sap.ui.define([
 
             // Rich Text Editor 
             oEditor: {
-            oRichTextEditor: new RichTextEditor("myRTE", {
-                editorType: sap.ui.richtexteditor.EditorType.TinyMCE4,
-                width: "100%",
-                height: "600px",
-                customToolbar: true,
-                showGroupFont: true,
-                showGroupLink: true,
-                showGroupInsert: true,
-                value: "{Detail>/ploat}",
-                editable: false,
-                ready: function () {
-                    this.addButtonGroup("styleselect").addButtonGroup("table");
-                }
-            })
-            
-        },
-
+                oRichTextEditor: new RichTextEditor("myRTE", {
+                    editorType: sap.ui.richtexteditor.EditorType.TinyMCE4,
+                    width: "100%",
+                    height: "600px",
+                    customToolbar: true,
+                    showGroupFont: true,
+                    showGroupLink: true,
+                    showGroupInsert: true,
+                    value: "{Detail>/ploat}",
+                    editable: false,
+                    ready: function () {
+                        this.addButtonGroup("styleselect").addButtonGroup("table");
+                    }
+                })
+            }
       });
    });

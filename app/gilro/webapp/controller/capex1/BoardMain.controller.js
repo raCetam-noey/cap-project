@@ -74,7 +74,6 @@ sap.ui.define([
             num: poNum,
            
         });
-         console.log(num);
         // 상세 페이지 이동시 메인 페이지 헤더 접기
         this.getView().byId("page").setHeaderExpanded(false);
         },
@@ -103,7 +102,6 @@ sap.ui.define([
             }
         },
 
-
         // 테이블 검색 버튼
         onSearch: function () {
             
@@ -128,7 +126,7 @@ sap.ui.define([
 
                 // 검색바 역할에 맞게 각 검색바 마다 필터 조건 넣기
                 let aIdFilter = [new Filter({path: "ID", operator: FilterOperator.Contains, value1: idValue, caseSensitive: false})]; 
-                let aAuthorFilter = [new Filter({path: "name", operator: FilterOperator.Contains, value1: authorValue, caseSensitive: false})]; 
+                let aAuthorFilter = [new Filter({path: "author/name", operator: FilterOperator.Contains, value1: authorValue, caseSensitive: false})]; 
                 let aTitleFilter = [new Filter({path: "title", operator: FilterOperator.Contains, value1: titleValue, caseSensitive: false})]; 
             
                 //각각 검색바에 검색 및 여러 개의 검색바에 검색값을 입력 했을시 내용 넣어주기
@@ -219,7 +217,7 @@ sap.ui.define([
 				this.getView()
 				.getModel("co")
 				.setProperty("/count", oBinding.aIndices.length);
-                }
+            }
                
         },
 
@@ -237,11 +235,20 @@ sap.ui.define([
 
          // cds Books 데이터 
         _getBooksSelect : function(){
-            let BooksPath = "/catalog/Books"
+            let BooksPath = "/catalog/Books?$expand=author"
 			this._getData(BooksPath).then((oBooksData) => {                                
                 var oBooksModel = new JSONModel(oBooksData.value)
                 console.log(oBooksModel);
                 this.getView().setModel(oBooksModel, "BooksSelect");
+                  // 테이블에 리스트 카운트 넣어주기
+                let oBinding = this.byId("Table").getBinding("items");
+                    if (oBinding != undefined && oBinding.aIndices != undefined) {
+                    modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
+                    this.getView()
+                        .getModel("co")
+                        .setProperty("/count", oBinding.aIndices.length);
+                        console.log(oBinding.aIndices.length);
+                    } 
             })
         },
             
@@ -269,7 +276,6 @@ sap.ui.define([
             this.onAuthorsDialogOpen("AuthorsSelect")    
 
         },
-
 
         //작가명 다이얼로그 창 생성
          onAuthorsDialogOpen : function(){

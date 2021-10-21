@@ -47,11 +47,11 @@
                         <form:SimpleForm>
                             <m:VBox width="100%" >
                                 <m:Label text="author_ID :" />
-                                <m:Text text="{Detail>/author_ID}" />
+                                <m:Text text="{Detail>/author/ID}" />
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="author_name :" />
-                                <m:Text text="{Detail>/name}" />
+                                <m:Text text="{Detail>/author/name}" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
