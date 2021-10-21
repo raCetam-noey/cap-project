@@ -73,10 +73,13 @@ sap.ui.define([
         this.getView().byId("page").setHeaderExpanded(false);
         },
 
-        // Author 다이얼로그 검색 버튼
+        // Author 다이얼로그 검색 버튼 
+        // if문을 사용하여서 값이 없거나 undefined일때 데이터를 불러오고 그 이후로는 필터 기능을 수행한다 - by Mua
         onSearchAuthors : function(oEvent){
-            this._getAuthorsSelect()
-
+            let Mua = this.getView().byId("AuthorsSearch").getValue();
+            if (Mua === undefined || Mua ==="") {
+                this._getAuthorsSelect();
+            } else {
             // add filter for search
 			var aFilters = [];
 			var sQuery = oEvent.getSource().getValue();
@@ -90,24 +93,10 @@ sap.ui.define([
 			var oBinding = oList.getBinding("items");
             oBinding.filter(aFilters, "name");
             console.log(oBinding);
-            // this.getView().byId("AuthorsSelectTable").refresh(true);
+          
+            }
         },
-        onLiveAuthors : function(oEvent){
-            // add filter for search
-			var aFilters = [];
-			var sQuery = oEvent.getSource().getValue();
-			if (sQuery && sQuery.length > 0) {
-				var filter = new Filter("name", FilterOperator.Contains, sQuery);
-				aFilters.push(filter);
-			}
 
-            // update list binding
-			var oList = this.byId("AuthorsSelectTable");
-			var oBinding = oList.getBinding("items");
-            oBinding.filter(aFilters, "name");
-            console.log(oBinding);
-
-        },
 
         // 테이블 검색 버튼
         onSearch: function (oEvent) {

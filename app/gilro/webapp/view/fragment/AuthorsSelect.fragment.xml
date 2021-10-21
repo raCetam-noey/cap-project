@@ -10,7 +10,7 @@
         contentHeight="30rem"
         contentWidth="40rem" >
     <content >
-        <SearchField class="sapUiTinyMarginBeginEnd" placeholder="검색" search=".onSearchAuthors" width="95%" id="AuthorsSearch" liveChange=".onLiveAuthors"/>
+        <SearchField class="sapUiTinyMarginBeginEnd" placeholder="검색" search=".onSearchAuthors" width="95%" id="AuthorsSearch"/>
         <Table
         id="AuthorsSelectTable"
         mode="SingleSelectLeft"
