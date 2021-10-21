@@ -34,6 +34,15 @@ sap.ui.define([
                 //Rich Text Editor 을 VerticalLayout 에 추가하기 
                 this.getView().byId("editor").addContent(this.oEditor.oRichTextEditor);
 
+                  let BooksPath = "/catalog/Books"
+                    this._getData(BooksPath).then((oBooksData) => {                                
+                    var oBooksModel = new JSONModel(oBooksData.value)
+                    console.log(oBooksModel);
+                    this.getView().setModel(oBooksModel, "Detail");
+                    })
+                  
+                
+
             },
 
             // 투컬럼 페이지 매칭 시 발동
@@ -63,31 +72,25 @@ sap.ui.define([
                 this.getOwnerComponent().getRouter().navTo("BoardMain");
             },
              //데이터 가져오기
-            callData : async function(){
-                modules.log("callData");
-                let data = await modules.select("/catalog/Books/ID");
-                let array = data.value;
-                modules.dir(array);
-                
-                if(array.length === 0){
-                    this.getView().setModel(new JSONModel(array), "delist");  
-                    modules.log("품목 배열 하나도 없음");
-                    return;
-                    
-                }
-                modules.dir(data);
-                console.log("detail");
-                this.getView().setModel(new JSONModel(data), "detail");
-               
+            _getBooksSelect : function(){
+              
             },
 
             // 데이터 조회
-            select : function(url){
-                modules.log("select");
-                return $.ajax({
-                    type: "get",
-                    url: url
+            _getData: (Path) => {
+                return new Promise((resolve) => {
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        url: Path,
+                        success: function (Data) {
+                            resolve(Data)
+                        },
+                        error: function (xhr, textStatus, errorMessage) {
+                            alert(errorMessage)
+                        },
                     })
+                })
             },
             // Rich Text Editor 
             oEditor: {
@@ -99,7 +102,7 @@ sap.ui.define([
                 showGroupFont: true,
                 showGroupLink: true,
                 showGroupInsert: true,
-                value: "",
+                value: "/catalog/Books",
                 editable: false,
                 ready: function () {
                     this.addButtonGroup("styleselect").addButtonGroup("table");

@@ -31,11 +31,11 @@
                         <form:SimpleForm>
                             <m:VBox>
                                 <m:Label text="title :" />
-                                <m:Text text="{detail>/title}" />
+                                <m:Text text="{Detail>title}" />
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="stock :" />
-                                <m:Text text="{detail>/title}" />
+                                <m:Text text="{Detail>title}" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -48,11 +48,11 @@
                         <form:SimpleForm>
                             <m:VBox>
                                 <m:Label text="author_ID :" />
-                                <m:Text text="{detail>/title}" />
+                                <m:Text text="{Detail>title}" />
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="author_name :" />
-                                <m:Text text="{detail>/title}" />
+                                <m:Text text="{Detail>title}" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -63,7 +63,7 @@
                 <subSections>
                     <ObjectPageSubSection id="section1_SS3" titleUppercase="false">
                         <form:SimpleForm>
-                            <layout:VerticalLayout id="editor" class="sapUiContentPadding" width="100%"/>
+                            <layout:VerticalLayout id="editor" class="sapUiContentPadding" width="100%" />
                         </form:SimpleForm>
                     </ObjectPageSubSection>
                 </subSections>

@@ -32,15 +32,15 @@
                 <form:SimpleForm maxContainerCols="2" editable="true" layout="ResponsiveGridLayout" adjustLabelSpan="false" labelSpanL="4" labelSpanM="4" emptySpanL="0" emptySpanM="0" columnsL="2" columnsM="2">
                     <form:content>
                         <VBox width="auto">
-                            <Label text="ID : " labelFor="P_number" ></Label>     
+                            <Label text="ID : " labelFor="P_id" ></Label>     
                             <Input id="P_id" width="95%"/>
                         </VBox>
                         <VBox width="auto">
-                            <Label text="Author : " ></Label>
+                            <Label text="Author : " labelFor="P_author"></Label>
                             <Input id="P_author" valueHelpOnly="false" showValueHelp="true" valueHelpRequest=".handleTableSelectDialogPress"/>
                         </VBox>
                         <VBox width="auto">
-                            <Label text="Title : " labelFor="P_company"></Label>
+                            <Label text="Title : " labelFor="P_title"></Label>
                             <Input id="P_title" />
                         </VBox>
                         <HBox justifyContent="End">

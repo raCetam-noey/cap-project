@@ -64,20 +64,63 @@ sap.ui.define([
         
         // 상세 페이지 라우팅
         onroutepage: function (oEvent) {
-        var poNum = oEvent.getSource().getCells()[0].getText();
-        modules.log(poNum);
-        this.getOwnerComponent().getRouter().navTo("BoardDetail", {
-          num: poNum,
+            var poNum = oEvent.getSource().getCells()[0].getText();
+            modules.log(poNum);
+            this.getOwnerComponent().getRouter().navTo("BoardDetail", {
+            num: poNum,
         });
+        // 상세 페이지 이동시 메인 페이지 헤더 접기
+        this.getView().byId("page").setHeaderExpanded(false);
         },
 
-        // 다이얼로그 검색 버튼
-        onSearchAuthors : function(){
+        // Author 다이얼로그 검색 버튼
+        onSearchAuthors : function(oEvent){
             this._getAuthorsSelect()
+
+            // add filter for search
+			var aFilters = [];
+			var sQuery = oEvent.getSource().getValue();
+			if (sQuery && sQuery.length > 0) {
+				var filter = new Filter("name", FilterOperator.Contains, sQuery);
+				aFilters.push(filter);
+			}
+
+            // update list binding
+			var oList = this.byId("AuthorsSelectTable");
+			var oBinding = oList.getBinding("items");
+            oBinding.filter(aFilters, "name");
+            console.log(oBinding);
+            // this.getView().byId("AuthorsSelectTable").refresh(true);
         },
+        onLiveAuthors : function(oEvent){
+            // add filter for search
+			var aFilters = [];
+			var sQuery = oEvent.getSource().getValue();
+			if (sQuery && sQuery.length > 0) {
+				var filter = new Filter("name", FilterOperator.Contains, sQuery);
+				aFilters.push(filter);
+			}
+
+            // update list binding
+			var oList = this.byId("AuthorsSelectTable");
+			var oBinding = oList.getBinding("items");
+            oBinding.filter(aFilters, "name");
+            console.log(oBinding);
+
+        },
+
         // 테이블 검색 버튼
-        onSearch: function () {
-            this._getBooksSelect()
+        onSearch: function (oEvent) {
+            this._getBooksSelect()	
+            var oTableSearchState = [],
+				sQuery = oEvent.getParameter("query");
+
+			if (sQuery && sQuery.length > 0) {
+				oTableSearchState = [new Filter("name", FilterOperator.Contains, sQuery)];
+			}
+
+			this.getView().byId("Table").getBinding("items").filter(oTableSearchState, "Application");
+            
           
         },
         //테이블 검색 버튼 초기화
@@ -152,7 +195,8 @@ sap.ui.define([
 				this.getView()
 				.getModel("co")
 				.setProperty("/count", oBinding.aIndices.length);
-				}
+                }
+               
         },
 
 
