@@ -10,15 +10,14 @@
         <headerTitle>
             <ObjectPageDynamicHeaderTitle>
                 <heading>
-                    <m:Title text="도서번호: " wrapping="true" />
+                    <m:Title text="도서번호: {Detail>/ID} " wrapping="true" />
                 </heading>
+                <navigationActions>
+                    <m:OverflowToolbarButton id="fullScreen" icon="sap-icon://full-screen" press=".onFull" tooltip="스크린 확장" />
+                    <m:OverflowToolbarButton id="exitScreen" icon="sap-icon://exit-full-screen" press=".onExitFull" tooltip="스크린 축소" />
+                    <m:OverflowToolbarButton type="Transparent" icon="sap-icon://decline" press=".onBack" tooltip="돌아가기" />
+                </navigationActions>
             </ObjectPageDynamicHeaderTitle>
-
-            <!-- <navigationActions>
-                <m:OverflowToolbarButton id="fullScreen" icon="sap-icon://full-screen" press=".onFull" tooltip="스크린 확장" />
-                <m:OverflowToolbarButton id="exitScreen" icon="sap-icon://exit-full-screen" press=".onExitFull" tooltip="스크린 축소" />
-                <m:OverflowToolbarButton icon="sap-icon://declinen" press=".onBack" tooltip="돌아가기" />
-            </navigationActions> -->
         </headerTitle>
 
         <headerContent>
@@ -31,11 +30,11 @@
                         <form:SimpleForm>
                             <m:VBox>
                                 <m:Label text="title :" />
-                                <m:Text text="{Detail>title}" />
+                                <m:Text text="{Detail>/title}" />
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="stock :" />
-                                <m:Text text="{Detail>title}" />
+                                <m:Text text="{Detail>/stock}" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -46,13 +45,13 @@
                 <subSections>
                     <ObjectPageSubSection id="section1_SS2" titleUppercase="false">
                         <form:SimpleForm>
-                            <m:VBox>
+                            <m:VBox width="100%" >
                                 <m:Label text="author_ID :" />
-                                <m:Text text="{Detail>title}" />
+                                <m:Text text="{Detail>/author_ID}" />
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="author_name :" />
-                                <m:Text text="{Detail>title}" />
+                                <m:Text text="{Detail>/name}" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>

@@ -19,8 +19,10 @@ sap.ui.define([
 		onInit: function () {
             // console.clear();
             console.log(" === BoardMain onInit === ");
-
-
+            
+        //검색 리스트 한번에 띄우기
+        this.onSearch();
+        
         // keep the reference to the OData model
         this.oDataModel = this.getOwnerComponent().getModel();        
                 
@@ -35,40 +37,44 @@ sap.ui.define([
 
         // 테이블에 리스트 카운트 넣어주기
         let oBinding = this.byId("Table").getBinding("items");
-        if (oBinding != undefined && oBinding.aIndices != undefined) {
-          modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
-          this.getView()
-            .getModel("co")
-            .setProperty("/count", oBinding.aIndices.length);
-             console.log(oBinding.aIndices.length);
-        }
-       
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+            modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
+            this.getView()
+                .getModel("co")
+                .setProperty("/count", oBinding.aIndices.length);
+                console.log(oBinding.aIndices.length);
+            } 
         },
         // 페이지 갱신시 발생하는 이벤트
         onMyRoutePatternMatched: async function (oEvent) {
         modules.log("onMyRoutePatternMatched");
-        _this = this;
+        // _this = this;
 
 
         // 테이블에 리스트 카운트 넣어주기
         let oBinding = this.byId("Table").getBinding("items");
-        if (oBinding != undefined && oBinding.aIndices != undefined) {
-          modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
-          this.getView()
-            .getModel("co")
-            .setProperty("/count", oBinding.aIndices.length);
-            this.getView().getModel("BooksSelect").refresh(true);
-        }
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+            modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
+            this.getView()
+                .getModel("co")
+                .setProperty("/count", oBinding.aIndices.length);
+                this.getView().getModel("BooksSelect").refresh(true);
+            }
         },
 
-        
+        onBack: function() {
+            this.getOwnerComponent().getRouter().navTo("Home");
+        },
+
         // 상세 페이지 라우팅
         onroutepage: function (oEvent) {
             var poNum = oEvent.getSource().getCells()[0].getText();
             modules.log(poNum);
             this.getOwnerComponent().getRouter().navTo("BoardDetail", {
             num: poNum,
+           
         });
+         console.log(num);
         // 상세 페이지 이동시 메인 페이지 헤더 접기
         this.getView().byId("page").setHeaderExpanded(false);
         },
@@ -99,18 +105,47 @@ sap.ui.define([
 
 
         // 테이블 검색 버튼
-        onSearch: function (oEvent) {
-            this._getBooksSelect()	
-            var oTableSearchState = [],
-				sQuery = oEvent.getParameter("query");
-
-			if (sQuery && sQuery.length > 0) {
-				oTableSearchState = [new Filter("name", FilterOperator.Contains, sQuery)];
-			}
-
-			this.getView().byId("Table").getBinding("items").filter(oTableSearchState, "Application");
+        onSearch: function () {
             
-          
+            // 검색바 값 가져오기
+            var searchFieldId     = this.getView().byId("P_id").getValue();
+            var searchFieldAuthor = this.getView().byId("P_author").getValue();
+            var searchFieldTitle  = this.getView().byId("P_title").getValue();
+            // 값이 없으면 데이터 가져오기 ( 전체 검색 + 데이터 최초로 받아오기 )
+            if(searchFieldId === "" && searchFieldAuthor === "" && searchFieldTitle === "" ) {
+                this._getBooksSelect();
+
+            } else {
+
+                let idValue = this.byId("P_id").getValue();
+                let authorValue = this.byId("P_author").getValue();
+                let titleValue = this.byId("P_title").getValue();
+
+                let oTable = this.byId("Table");
+
+                // 검색바 입력에 맞는 조건을을 넣을 배열
+                let aTableSearchState = [];
+
+                // 검색바 역할에 맞게 각 검색바 마다 필터 조건 넣기
+                let aIdFilter = [new Filter({path: "ID", operator: FilterOperator.Contains, value1: idValue, caseSensitive: false})]; 
+                let aAuthorFilter = [new Filter({path: "name", operator: FilterOperator.Contains, value1: authorValue, caseSensitive: false})]; 
+                let aTitleFilter = [new Filter({path: "title", operator: FilterOperator.Contains, value1: titleValue, caseSensitive: false})]; 
+            
+                //각각 검색바에 검색 및 여러 개의 검색바에 검색값을 입력 했을시 내용 넣어주기
+                aTableSearchState.push(new Filter({filters: aIdFilter}));
+                aTableSearchState.push(new Filter({filters: aAuthorFilter}));
+                aTableSearchState.push(new Filter({filters: aTitleFilter}));
+
+                oTable.getBinding("items").filter(aTableSearchState);
+
+            }
+
+            //테이블 갯수 카운트해서 JSON에 넣기
+            let oBinding = this.byId("Table").getBinding("items");
+
+            if (oBinding != undefined && oBinding.aIndices != undefined) {
+            this.getView().getModel("co").setProperty("/count", oBinding.aIndices.length);
+            }
         },
         //테이블 검색 버튼 초기화
         onPressReset : function(){

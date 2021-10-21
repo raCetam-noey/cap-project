@@ -20,7 +20,8 @@
             <f:DynamicPageTitle>
                 <f:heading>
                     <HBox>
-                        <OverflowToolbarButton id="pageNavBackButton" type="Transparent" icon="sap-icon://nav-back" press=".onback" />
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://nav-back" press=".onBack" tooltip="돌아가기" />
+                        <ToolbarSpacer/>
                         <Title text="목록" class="sapUiTinyMarginTop"/>
                     </HBox>
                 </f:heading>
@@ -33,7 +34,7 @@
                     <form:content>
                         <VBox width="auto">
                             <Label text="ID : " labelFor="P_id" ></Label>     
-                            <Input id="P_id" width="95%"/>
+                            <Input id="P_id" width="95%" type="Number"/>
                         </VBox>
                         <VBox width="auto">
                             <Label text="Author : " labelFor="P_author"></Label>

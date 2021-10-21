@@ -33,65 +33,75 @@ sap.ui.define([
 
                 //Rich Text Editor 을 VerticalLayout 에 추가하기 
                 this.getView().byId("editor").addContent(this.oEditor.oRichTextEditor);
-
-                  let BooksPath = "/catalog/Books"
-                    this._getData(BooksPath).then((oBooksData) => {                                
-                    var oBooksModel = new JSONModel(oBooksData.value)
-                    console.log(oBooksModel);
-                    this.getView().setModel(oBooksModel, "Detail");
-                    })
                   
-                
-
             },
 
             // 투컬럼 페이지 매칭 시 발동
-            onMyRoutePatternMatched: function () {
-                // this.byId("fullScreen").setVisible(true);
-                // this.byId("exitScreen").setVisible(false);
+            onMyRoutePatternMatched: function (e) {
+                this.byId("fullScreen").setVisible(true);
+                this.byId("exitScreen").setVisible(false);
+                _data = this.getView().getModel("BoardDetail");
+                _this = this;
+                _param = e.getParameter("arguments").num;
+                this.selectList();
             },
 
             // 풀스크린 페이지 매칭 시 발동
-            onMyRoutePatternMatched2: function () {
-                // this.byId("fullScreen").setVisible(false);
-                // this.byId("exitScreen").setVisible(true);
+            onMyRoutePatternMatched2: function (e) {
+                this.byId("fullScreen").setVisible(false);
+                this.byId("exitScreen").setVisible(true);
+                _data = this.getView().getModel("BoardDetail");
+                _this = this;
+                _param = e.getParameter("arguments").num;
+                this.selectList();
             },
 
             // 스크린 확장
             onFull: function () {
-                this.getOwnerComponent().getRouter().navTo("BoardDetail");
+                 modules.routing(this,"BoardDetailFull",{num: _param})
             },
 
             // 스크린 축소
             onExitFull: function () {
-                this.getOwnerComponent().getRouter().navTo("BoardDetailFull");
+                 modules.routing(this,"BoardDetail",{num: _param})
             },
 
             // 돌아가기
             onBack: function () {
                 this.getOwnerComponent().getRouter().navTo("BoardMain");
+                
             },
              //데이터 가져오기
-            _getBooksSelect : function(){
-              
+            selectList : async function(){
+                // modules.log("selectList");
+                //select 라는 함수를 호출해서 매개변수로 해서 string의 값으로 넣는다
+                
+                let list = await this.select("/catalog/Books");
+                modules.dir(list, "list");
+                console.log(list.value);
+                let oArray = list.value;
+                let data;
+                for(let i in oArray){
+                    if(oArray[i].ID === _param){
+                        data = oArray[i];
+                    }
+                }
+                modules.dir(data, "data");
+                console.log(_param);
+                
+                this.getView().setModel(new JSONModel(data), "Detail");
+                this.getView().getModel("Detail").refresh(true);
             },
 
             // 데이터 조회
-            _getData: (Path) => {
-                return new Promise((resolve) => {
-                    $.ajax({
-                        type: "get",
-                        async: false,
-                        url: Path,
-                        success: function (Data) {
-                            resolve(Data)
-                        },
-                        error: function (xhr, textStatus, errorMessage) {
-                            alert(errorMessage)
-                        },
+            select : function(url){
+                // modules.log("select");
+                return $.ajax({
+                    type: "get",
+                    url: url
                     })
-                })
             },
+
             // Rich Text Editor 
             oEditor: {
             oRichTextEditor: new RichTextEditor("myRTE", {
@@ -102,7 +112,7 @@ sap.ui.define([
                 showGroupFont: true,
                 showGroupLink: true,
                 showGroupInsert: true,
-                value: "/catalog/Books",
+                value: "{Detail>/ploat}",
                 editable: false,
                 ready: function () {
                     this.addButtonGroup("styleselect").addButtonGroup("table");
