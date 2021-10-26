@@ -32,7 +32,7 @@ sap.ui.define([
                 fullDetail.attachPatternMatched(this.onMyRoutePatternMatched2, this);
 
                 //Rich Text Editor 을 VerticalLayout 에 추가하기 
-                this.getView().byId("editor").addContent(this.oEditor.oRichTextEditor);
+                // this.getView().byId("editor").addContent(this.oEditor.oRichTextEditor);
                   
             },
 
@@ -102,22 +102,6 @@ sap.ui.define([
                     })
             },
 
-            // Rich Text Editor 
-            oEditor: {
-                oRichTextEditor: new RichTextEditor("myRTE", {
-                    editorType: sap.ui.richtexteditor.EditorType.TinyMCE4,
-                    width: "100%",
-                    height: "600px",
-                    customToolbar: true,
-                    showGroupFont: true,
-                    showGroupLink: true,
-                    showGroupInsert: true,
-                    value: "{Detail>/ploat}",
-                    editable: false,
-                    ready: function () {
-                        this.addButtonGroup("styleselect").addButtonGroup("table");
-                    }
-                })
-            }
+
       });
    });

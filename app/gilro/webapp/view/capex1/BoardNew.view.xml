@@ -1,0 +1,97 @@
+<mvc:View 
+xmlns:f="sap.f" 
+xmlns:uxap="sap.uxap" 
+xmlns:rte="sap.ui.richtexteditor" 
+xmlns:t="sap.ui.table" 
+xmlns:core="sap.ui.core" 
+xmlns:c="sap.suite.ui.commons" 
+xmlns:form="sap.ui.layout.form" 
+xmlns="sap.m" 
+xmlns:m="sap.m" 
+xmlns:mvc="sap.ui.core.mvc" 
+xmlns:l="sap.ui.layout" 
+xmlns:micro="sap.suite.ui.microchart" 
+controllerName="gilro.controller.capex1.BoardNew" 
+width="100%" 
+height="100%"> 
+	<uxap:ObjectPageLayout id="ObjectPageLayout" toggleHeaderOnTitleClick="false" enableLazyLoading="true"
+		useIconTabBar="true"
+		showTitleInHeaderContent="true"
+		upperCaseAnchorBar="false" showFooter="true">
+		<uxap:headerTitle>
+			<uxap:ObjectPageDynamicHeaderTitle>
+				<uxap:heading>
+					<HBox>
+                        <OverflowToolbarButton type="Transparent" icon="sap-icon://nav-back" press="onBack" tooltip="돌아가기" />
+						<core:Icon  src="sap-icon://edit" size="1.5rem"/>
+						<Title text="등록" class="sapUiTinyMarginBegin" />
+					</HBox>
+				</uxap:heading>
+				<uxap:actions>
+					
+				</uxap:actions>
+			</uxap:ObjectPageDynamicHeaderTitle>
+		</uxap:headerTitle>
+		<uxap:sections>
+			<uxap:ObjectPageSection titleUppercase="false" showTitle="false">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="기본 정보"  titleUppercase="false">
+						<uxap:blocks>
+                        
+							<form:SimpleForm id="NewProjectForm" editable="true" layout="ResponsiveGridLayout">
+								<form:content>
+									<VBox width="auto">
+                                        <VBox width="auto" class="sapUiSmallMargin">
+                                            <Label text="ID" labelFor="P_number" required="true" />  
+                                            <Input id="id" editable="false" width="80%" />
+                                        </VBox>
+                                        <VBox width="auto" class="sapUiSmallMargin">
+                                            <Label text="author" labelFor="P_author" required="true" />  
+                                            <Input id="author" width="80%" showValueHelp="true" valueHelpRequest=".handleTableSelectDialogPress" valueHelpOnly="true" />
+                                        </VBox>
+                                    </VBox>
+                                    <VBox width="auto">
+                                        <VBox width="auto" class="sapUiSmallMargin">
+                                            <Label text="title" labelFor="P_title" required="true" />
+                                            <Input id="title" width="80%" />
+                                        </VBox>
+                                        <VBox width="auto" class="sapUiSmallMargin">
+                                            <Label text="stock" labelFor="P_stock" required="true" />
+                                            <Input id="stock" width="80%" />
+                                        </VBox>
+                                    </VBox>
+									<Label text="Float" labelFor="P_float">
+										<layoutData>
+											<l:GridData span="XL2 L2 M12 S12"/>
+										</layoutData>
+									</Label>
+									<rte:RichTextEditor width="80%" height="30rem" id="pFloat" value="" class="sapUiSmallMargin"
+														customToolbar="true" editable="true" editorType="TinyMCE5"
+														beforeEditorInit="onBeforeInit" ready="onReady" useLegacyTheme="true" showGroupClipboard="true"
+														showGroupTextAlign="true" showGroupStructure="true" showGroupInsert="true" 
+														showGroupLink="true" showGroupFont="true">
+										
+									</rte:RichTextEditor>
+								</form:content>
+							</form:SimpleForm>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+		<uxap:footer>
+			<OverflowToolbar >
+            	<Button id="messagePopoverBtn"
+                    visible="false"
+					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
+					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
+					text= "{path: '/', formatter: '.highestSeverityMessages' }"
+					press=".handleMessagePopoverPress"
+					ariaHasPopup="Dialog"/>
+				<ToolbarSpacer/>
+				<Button text="저장" press="onSave"/>
+				<Button text="취소" press=".onBack"/>
+			</OverflowToolbar>
+		</uxap:footer>
+	</uxap:ObjectPageLayout>
+</mvc:View>

@@ -67,6 +67,11 @@
                     <OverflowToolbar>
                         <Title text="List  ({co>/count})" level="H2"/>
                         <ToolbarSpacer/>
+                        <Button icon="sap-icon://write-new" press=".onCreate" >
+                            <layoutData>
+                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                            </layoutData>
+                        </Button>   
                         <Button icon="sap-icon://excel-attachment" press=".onDataExport">
                             <layoutData>
                                 <OverflowToolbarLayoutData priority="NeverOverflow" />

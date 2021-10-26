@@ -50,16 +50,12 @@ sap.ui.define([
         modules.log("onMyRoutePatternMatched");
         // _this = this;
 
+        },
 
-        // 테이블에 리스트 카운트 넣어주기
-        let oBinding = this.byId("Table").getBinding("items");
-            if (oBinding != undefined && oBinding.aIndices != undefined) {
-            modules.dir("조회 리스트 갯수 : " + oBinding.aIndices.length);
-            this.getView()
-                .getModel("co")
-                .setProperty("/count", oBinding.aIndices.length);
-                this.getView().getModel("BooksSelect").refresh(true);
-            }
+         // 작성 버튼 클릭
+        onCreate: function() {
+            this.getOwnerComponent().getRouter().navTo("BoardNew");
+        
         },
 
         onBack: function() {

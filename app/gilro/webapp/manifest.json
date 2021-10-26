@@ -271,6 +271,15 @@
           ],
 
         "layout": "MidColumnFullScreen"
+      },
+      {
+          "pattern": "capex1/BoardNew",
+          "name": "BoardNew",
+          "target": [
+            "BoardMain",
+            "BoardNew"
+          ],
+          "layout": "OneColumn"
       }
       ],
 
@@ -292,6 +301,12 @@
           "viewPath": "gilro.view.capex1",
           "viewName": "BoardDetail",
           "controlAggregation": "midColumnPages"
+        },
+        "BoardNew": {
+          "viewId": "BoardNew",
+          "viewPath": "gilro.view.capex1",
+          "viewName": "BoardNew",
+          "controlAggregation": "beginColumnPages"
         }
 
       }
