@@ -8,15 +8,14 @@ sap.ui.define([
     "sap/ui/core/Fragment",
     'sap/ui/export/library',
     "sap/ui/model/Sorter",
-    "sap/m/MessageToast",
-    "sap/ui/richtexteditor/RichTextEditor"
+    "sap/m/MessageToast"
     
 ],
    /**
     * @param {typeof sap.ui.core.mvc.Controller} Controller
     */
    function (Controller, JSONModel, MessageBox, Filter, FilterOperator, modules, Fragment, exportLibrary,
-    Sorter, MessageToast, RichTextEditor) {
+    Sorter, MessageToast) {
       "use strict";
         const EdmType = exportLibrary.EdmType;
         let _this;
@@ -24,6 +23,14 @@ sap.ui.define([
         let _data;
       return Controller.extend("gilro.controller.capex1.BoardDetail", {
          onInit: function () {
+
+                //editMode
+                let oEditModel = new JSONModel({
+                    editMode: true
+                })
+                this.getView().setModel(oEditModel, "editModeSwitch")
+                
+
                 //페이지 갱신될 때 실행되는 함수 호출
                 let Detail = this.getOwnerComponent().getRouter().getRoute("BoardDetail");
                 let fullDetail = this.getOwnerComponent().getRouter().getRoute("BoardDetailFull");
@@ -70,6 +77,40 @@ sap.ui.define([
             onBack: function () {
                 this.getOwnerComponent().getRouter().navTo("BoardMain");
                 
+            },
+            onEdit: function() {
+            this.edit = this.getView().getModel("editModeSwitch")
+                if (this.edit.getProperty("/editMode")) {
+                     this.edit.setProperty("/editMode", false)
+                     this.byId("pFloat").setEditable(true);
+                }
+                this.byId("editButton").setVisible(false);
+                this.byId("deleteButton").setVisible(false);
+                this.byId("saveButton").setVisible(true);
+                this.byId("cancelButton").setVisible(true);
+                
+            },
+            
+            onCancel: function (oEvent) {
+                MessageBox.confirm("돌아가시겠습니까? 작성한 데이터들은 저장되지 않습니다.", {
+                    icon: MessageBox.Icon.CONFIRM,
+                    action: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    onClose: function(oAction) {
+                        if (oAction === "OK") {
+                            if(!this.edit.getProperty("/editMode")) {
+                                this.edit.setProperty("/editMode", true)
+                                this.byId("pFloat").setEditable(false);
+                            }
+                            this.byId("editButton").setVisible(true);
+                            this.byId("deleteButton").setVisible(true);
+                            this.byId("saveButton").setVisible(false);
+                            this.byId("cancelButton").setVisible(false);
+                            this.getOwnerComponent().getRouter().navTo("BoardMain")
+                        }
+                    }.bind(this)
+                    
+
+                })
             },
              //데이터 가져오기
             selectList : async function(){

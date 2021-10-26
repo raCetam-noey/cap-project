@@ -8,17 +8,29 @@ sap.ui.define([
     'sap/m/MessagePopover',
 	'sap/m/MessageItem',
 	'sap/m/MessageToast',
-	'sap/m/Link'
+    'sap/m/Link',
+    "sap/ui/core/ValueState",
+    "sap/ui/model/Sorter",
+    "sap/ui/core/BusyIndicator",
+    "sap/m/MessageBox"
 ],
    /**
     * @param {typeof sap.ui.core.mvc.Controller} Controller
     */
-   function (Controller, RichTextEditor, JSONModel, Fragment, Filter, FilterOperator, MessagePopover, MessageItem, MessageToast, Link ) {
+   function (Controller, RichTextEditor, JSONModel, Fragment, Filter, FilterOperator, MessagePopover, MessageItem, MessageToast, Link, ValueState, Sorter, BusyIndicator, MessageBox) {
         "use strict";
         var oMessagePopover;
 
       return Controller.extend("gilro.controller.capex1.BoardNew", {
          onInit: function () {
+
+            this._getBooksSelect();
+
+            this.inputField1 = this.byId("title");
+            this.inputField2 = this.byId("author");
+            this.inputField3 = this.byId("stock");
+            this.inputField4 = this.byId("pFloat");
+
             var oLink = new Link({
             text: "Show more information",
             href: "http://sap.com",
@@ -34,15 +46,6 @@ sap.ui.define([
                 counter: '{counter}',
                 link: oLink
             });
-            
-            //팝오버 에러 샘플 디테일 메세지
-            var sErrorDescription = 'First Error message description. \n' +
-                'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod' +
-                'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
-                'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo' +
-                'consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse' +
-                'cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non' +
-                'proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 
             //메세지 팝오버 생성
             oMessagePopover = new MessagePopover({
@@ -77,13 +80,79 @@ sap.ui.define([
             this.getView().setModel(oModel);
             this.byId("messagePopoverBtn").addDependent(oMessagePopover);
       
+            }, 
+            
+            onSave: function() {
+            
+            var oButton = this.byId("messagePopoverBtn")
+            oButton.setVisible(true);
+
+            // 인풋 필드 Value Status
+                if(!this.inputField1.getValue()){
+                    this.inputField1.setValueState("Error");
+                    this.inputField1.setValueStateText("제목을 입력해주세요.");
+                    this.inputField1.focus(this.inputField1);
+                } else {
+                    this.inputField1.setValueState("None");
+                    this.inputField1.setValueStateText("");
+                }
+                
+            
+                if(!this.inputField2.getValue()){
+                    this.inputField2.setValueState("Error");
+                    this.inputField2.setValueStateText("저자를 입력해주세요.");
+                    this.inputField2.focus(this.inputField2);
+                } else {
+                    this.inputField2.setValueState("None");
+                    this.inputField2.setValueStateText("");
+                }
+
+            
+                if(!this.inputField3.getValue()){
+                    this.inputField3.setValueState("Error");
+                    this.inputField3.setValueStateText("재고를 입력해주세요.");
+                    this.inputField3.focus(this.inputField3);
+
+                } else {
+                    this.inputField3.setValueState("None");
+                    this.inputField3.setValueStateText("");
+                }
+
             },
 
             // 뒤로가기 (메인페이지로 이동)
             onBack: function () {
-                this.getOwnerComponent().getRouter().navTo("BoardMain");
+                var oButton = this.byId("messagePopoverBtn")
+                MessageBox.confirm("돌아가시겠습니까? 작성한 데이터들은 저장되지 않습니다.", {
+                    icon: MessageBox.Icon.CONFIRM,
+                    action: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    onClose: function(oAction) {
+                        if (oAction === "OK") {
+                            oButton.setVisible(false);
+                            if (this.inputField1 !== undefined) {
+                                this.inputField1.setValueState("None");
+                                this.inputField1.setValue("");
+                            }
+                             if (this.inputField2 !== undefined) {
+                                 this.inputField2.setValueState("None");
+                                 this.inputField2.setValue("");
+                            }
+                              if (this.inputField3 !== undefined) {
+                                  this.inputField3.setValueState("None");
+                                  this.inputField3.setValue("");
+                            }
+                              if (this.inputField4 !== undefined) {
+                                  console.log(this.inputField4);
+                                  this.inputField4.setValue("");
+                            }
+                            console.log(this.inputField4);
+                            this.getOwnerComponent().getRouter().navTo("BoardMain")
+                        }
+                    }.bind(this)
+
+                })
             },
-     
+            
             // InputBox안에 ValueHelp 버튼 누르면 다이얼로그 창 생성
             handleTableSelectDialogPress: function () {
                 var oAuthorModel = new JSONModel()
@@ -149,7 +218,24 @@ sap.ui.define([
                     // console.log(oAuthorsModel);
                     this.getView().setModel(oAuthorsModel, "AuthorsSelect");
                 })
+              
 
+            },
+
+              // cds Books 데이터 
+            _getBooksSelect : function(){
+                var that = this;
+                let BooksPath = "/catalog/Books?$expand=author"
+                this._getData(BooksPath).then((oBooksData) => {                                
+                    var oBooksModel = new JSONModel(oBooksData.value)
+                    console.log(oBooksModel);
+                    this.getView().setModel(oBooksModel, "BooksSelect");
+
+                    var oBooks = that.getView().getModel("BooksSelect").getProperty("/");
+                    var bookID = Number(oBooks[oBooks.length-1]['ID'])+1;
+                    console.log(bookID, "북아이디");
+                    that.getView().byId("id").setValue(bookID);
+                })
             },
 
             // ajax를 사용하여 데이터 가져오기
@@ -272,44 +358,6 @@ sap.ui.define([
 
             handleMessagePopoverPress: function (oEvent) {
                 oMessagePopover.toggle(oEvent.getSource());
-            },
-
-            onSave: function() {
-            
-            var oButton = this.byId("messagePopoverBtn")
-            oButton.setVisible(true);
-
-            // 인풋 필드 Value Status
-            var inputField1 = this.byId("title");
-                if(!inputField1.getValue()){
-                    inputField1.setValueState("Error");
-                    inputField1.setValueStateText("제목을 입력해주세요.");
-                    inputField1.focus(inputField1);
-                } else {
-                    inputField1.setValueState("None");
-                    inputField1.setValueStateText("");
-                }
-                
-            var inputField2 = this.byId("author");
-                if(!inputField2.getValue()){
-                    inputField2.setValueState("Error");
-                    inputField2.setValueStateText("저자를 입력해주세요.");
-                    inputField2.focus(inputField2);
-                } else {
-                    inputField2.setValueState("None");
-                    inputField2.setValueStateText("");
-                }
-
-            var inputField3 = this.byId("stock");
-                if(!inputField3.getValue()){
-                    inputField3.setValueState("Error");
-                    inputField3.setValueStateText("재고를 입력해주세요.");
-                    inputField3.focus(inputField3);
-
-                } else {
-                    inputField3.setValueState("None");
-                    inputField3.setValueStateText("");
-                }
             }
    });
 });

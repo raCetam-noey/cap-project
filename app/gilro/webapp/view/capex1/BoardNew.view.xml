@@ -37,43 +37,46 @@ height="100%">
 				<uxap:subSections>
 					<uxap:ObjectPageSubSection title="기본 정보"  titleUppercase="false">
 						<uxap:blocks>
-                        
-							<form:SimpleForm id="NewProjectForm" editable="true" layout="ResponsiveGridLayout">
-								<form:content>
-									<VBox width="auto">
-                                        <VBox width="auto" class="sapUiSmallMargin">
-                                            <Label text="ID" labelFor="P_number" required="true" />  
-                                            <Input id="id" editable="false" width="80%" />
+								<!-- <form:content> -->
+                                <VBox width="auto" class="sapUiSmallMargin">
+                                	<form:SimpleForm id="NewProjectForm" editable="true" layout="ResponsiveGridLayout">
+                                        <form:content>
+                                        <VBox width="auto">
+                                            <VBox width="auto" class="sapUiSmallMargin">
+                                                <Label text="ID" labelFor="P_number" required="true" />  
+                                                <Input id="id" editable="false" width="80%" value=""/>
+                                            </VBox>
+                                            <VBox width="auto" class="sapUiSmallMargin">
+                                                <Label text="author" labelFor="P_author" required="true" />  
+                                                <Input id="author" width="80%" showValueHelp="true" valueHelpRequest=".handleTableSelectDialogPress" valueHelpOnly="true" />
+                                            </VBox>
                                         </VBox>
-                                        <VBox width="auto" class="sapUiSmallMargin">
-                                            <Label text="author" labelFor="P_author" required="true" />  
-                                            <Input id="author" width="80%" showValueHelp="true" valueHelpRequest=".handleTableSelectDialogPress" valueHelpOnly="true" />
+                                        <VBox width="auto">
+                                            <VBox width="auto" class="sapUiSmallMargin">
+                                                <Label text="title" labelFor="P_title" required="true" />
+                                                <Input id="title" width="80%" />
+                                            </VBox>
+                                            <VBox width="auto" class="sapUiSmallMargin">
+                                                <Label text="stock" labelFor="P_stock" required="true" />
+                                                <Input id="stock" width="80%" />
+                                            </VBox>
                                         </VBox>
-                                    </VBox>
-                                    <VBox width="auto">
-                                        <VBox width="auto" class="sapUiSmallMargin">
-                                            <Label text="title" labelFor="P_title" required="true" />
-                                            <Input id="title" width="80%" />
-                                        </VBox>
-                                        <VBox width="auto" class="sapUiSmallMargin">
-                                            <Label text="stock" labelFor="P_stock" required="true" />
-                                            <Input id="stock" width="80%" />
-                                        </VBox>
-                                    </VBox>
-									<Label text="Float" labelFor="P_float">
-										<layoutData>
-											<l:GridData span="XL2 L2 M12 S12"/>
-										</layoutData>
-									</Label>
-									<rte:RichTextEditor width="80%" height="30rem" id="pFloat" value="" class="sapUiSmallMargin"
-														customToolbar="true" editable="true" editorType="TinyMCE5"
-														beforeEditorInit="onBeforeInit" ready="onReady" useLegacyTheme="true" showGroupClipboard="true"
-														showGroupTextAlign="true" showGroupStructure="true" showGroupInsert="true" 
-														showGroupLink="true" showGroupFont="true">
-										
-									</rte:RichTextEditor>
-								</form:content>
-							</form:SimpleForm>
+                                        </form:content>
+                                    </form:SimpleForm>
+                                    <form:SimpleForm id="NewProjectForm2" editable="true" layout="ResponsiveGridLayout">
+                                        <form:content>
+                                                <VBox width="auto" class="sapUiSmallMargin">
+                                                    <rte:RichTextEditor width="90%" height="30rem" id="pFloat" value=""
+                                                                    customToolbar="true" editable="true" editorType="TinyMCE5"
+                                                                    beforeEditorInit="onBeforeInit" ready="onReady" useLegacyTheme="true" showGroupClipboard="true"
+                                                                    showGroupTextAlign="true" showGroupStructure="true" showGroupInsert="true" 
+                                                                    showGroupLink="true" showGroupFont="true">
+                                                    </rte:RichTextEditor>
+                                                </VBox>
+                                        </form:content>
+                                    </form:SimpleForm>
+                                </VBox>
+                            <!-- </form:content> -->
 						</uxap:blocks>
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>

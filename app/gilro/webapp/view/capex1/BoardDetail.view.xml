@@ -7,7 +7,7 @@
     xmlns:form="sap.ui.layout.form"
     xmlns:rte="sap.ui.richtexteditor" 
     displayBlock="true">
-    <ObjectPageLayout>
+    <ObjectPageLayout showFooter="true" >
         <headerTitle>
             <ObjectPageDynamicHeaderTitle>
                 <heading>
@@ -31,11 +31,13 @@
                         <form:SimpleForm>
                             <m:VBox>
                                 <m:Label text="title :" />
-                                <m:Text text="{Detail>/title}" />
+                                <m:Text text="{Detail>/title}" visible="{=${editModeSwitch>/editMode}}"/>
+                                <m:Input value="{Detail>/title}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="stock :" />
-                                <m:Text text="{Detail>/stock}" />
+                                <m:Text text="{Detail>/stock}" visible="{=${editModeSwitch>/editMode}}"/>
+                                <m:Input value="{Detail>/stock}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -48,11 +50,13 @@
                         <form:SimpleForm>
                             <m:VBox width="100%" >
                                 <m:Label text="author_ID :" />
-                                <m:Text text="{Detail>/author/ID}" />
+                                <m:Text text="{Detail>/author/ID}" visible="{=${editModeSwitch>/editMode}}"/>
+                                <m:Input value="{Detail>/author/ID}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="author_name :" />
-                                <m:Text text="{Detail>/author/name}" />
+                                <m:Text text="{Detail>/author/name}" visible="{=${editModeSwitch>/editMode}}"/>
+                                <m:Input value="{Detail>/author/name}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -74,5 +78,18 @@
                 </subSections>
             </ObjectPageSection>
         </sections>
+        <footer>
+			<m:OverflowToolbar >
+				<m:ToolbarSpacer/>
+					<m:Button id="editButton" text="수정" type="Emphasized"
+                        press=".onEdit" />
+                    <m:Button id="deleteButton" text="삭제" type="Transparent"
+                        press=".onDelete" />
+                    <m:Button id="saveButton" text="저장" type="Emphasized"
+                        press=".onSave" visible="false" />
+                    <m:Button id="cancelButton" text="취소" type="Transparent"
+                        press=".onCancel" visible="false" />
+			</m:OverflowToolbar>
+		</footer>
     </ObjectPageLayout>
 </mvc:View>
