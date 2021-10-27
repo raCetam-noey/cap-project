@@ -25,14 +25,8 @@ sap.ui.define([
             //책 내용들 밀어주기
             Books: {
             },
-
             onInit: function (oEvent) {
-
-
                 this._getBooksSelect();
-
-
-
 
                 // 유효성 검사에 필요한 값들의 전역변수
                 this.id = this.byId("id");
@@ -41,16 +35,92 @@ sap.ui.define([
                 this.stock = this.byId("stock");
                 this.ploat = this.byId("ploat");
 
+                // 페이지 갱신될때 실행되는 함수 호출
+                const myRoute = this.getOwnerComponent().getRouter().getRoute("BoardNew");
+                myRoute.attachPatternMatched(this.onMyRoutePatternMatched, this);
 
+            },
+
+             // 페이지 갱신시 발생하는 이벤트
+            onMyRoutePatternMatched: async function () {
+            // modules.log("onMyRoutePatternMatched");
+            this._getBooksSelect();
+            this.oButton.setVisible(false);
+            this.title.setValue("");
+            this.author.setValue("");
+            this.stock.setValue("");
+            this.ploat.setValue("");
+            console.log("북 데이터 다시 불러오기");
+
+            },
+            
+
+            onSave: function () {
+                
+                //Popover 클릭 시 나오는 아이콘(타입) 설정
+                var stockType = "Success";
+                var titleType = "Success";
+                var authorType = "Success";
+                var textType = "Success";
+
+                //Subtitle 지정
+                var stockTitle = "재고 수량 입력 완료";
+                var titleTitle = "제목 입력 완료";
+                var authorTitle = "저자 입력 완료";
+                var textTitle = "줄거리 입력 완료";
+
+                this.oButton = this.byId("messagePopoverBtn")
+                this.oButton.setVisible(true);
+
+                // 인풋 필드 Value Status
+                if (!this.title.getValue()) {
+                    this.title.setValueState("Error");
+                    this.title.setValueStateText("제목을 입력해주세요.");
+                    this.title.focus(this.title);
+                    titleType = "Error";
+                    titleTitle = "제목을 입력해주세요.";
+                } else {
+                    this.title.setValueState("None");
+                    this.title.setValueStateText("");
+                }
+
+                if (!this.author.getValue()) {
+                    this.author.setValueState("Error");
+                    this.author.setValueStateText("저자를 입력해주세요.");
+                    this.author.focus(this.author);
+                    authorType = "Error";
+                    authorTitle = "저자를 입력해주세요.";
+                } else {
+                    this.author.setValueState("None");
+                    this.author.setValueStateText("");
+                }
+
+                if (!this.stock.getValue()) {
+                    this.stock.setValueState("Error");
+                    this.stock.setValueStateText("재고를 입력해주세요.");
+                    this.stock.focus(this.stock);
+                    stockType = "Error";
+                    stockTitle = "재고를 입력해주세요."
+
+                } else {
+                    this.stock.setValueState("None");
+                    this.stock.setValueStateText("");
+                }
+
+                if (!this.ploat.getValue()) {
+                    textType = "Error";
+                    textTitle = "줄거리를 입력해주세요";
+
+                }
+                //Message Popover 클릭 시 나오는 항목마다 보여줄 값들
                 var oMessageTemplate = new MessageItem({
-                    type: '{type}',
-                    title: '{title}',
+                    type: '{popModel>type}',
+                    title: '{popModel>title}',
+                    subtitle: '{popModel>subtitle}'
                 });
-
-                //메세지 팝오버 생성
                 oMessagePopover = new MessagePopover({
                     items: {
-                        path: '/',
+                        path: 'popModel>/',
                         template: oMessageTemplate
                     },
                     activeTitlePress: function () {
@@ -58,68 +128,30 @@ sap.ui.define([
                     }
                 });
 
-                var aMockMessages = [{
-                    type: 'Success',
-                    title: '제목 입력 완료'
+                // type, title, subtitle 설정
+                var MessageModel = [{
+                    type: titleType,
+                    title: "Title",
+                    subtitle: titleTitle,
                 }, {
-                    type: 'Warning',
-                    title: '저자를 제대로 입력해주세요',
-                    description: ''
+                    type: authorType,
+                    title: "Author",
+                    subtitle: authorTitle,
                 }, {
-                    type: 'Warning',
-                    title: '재고를 제대로 입력해주세요',
-                    description: ''
+                    type: stockType,
+                    title: "Stock",
+                    subtitle: stockTitle,
                 }, {
-                    type: 'Success',
-                    title: '줄거리 입력 완료',
-
+                    type: textType,
+                    title: "Description",
+                    subtitle: textTitle,
                 }];
 
+                //모델 만들기
                 var oModel = new JSONModel();
-                oModel.setData(aMockMessages);
-                this.getView().setModel(oModel);
+                oModel.setData(MessageModel);
+                this.getView().setModel(oModel, "popModel");
                 this.byId("messagePopoverBtn").addDependent(oMessagePopover);
-
-
-            },
-
-            onSave: function () {
-
-                var oButton = this.byId("messagePopoverBtn")
-                oButton.setVisible(true);
-
-                // 인풋 필드 Value Status
-                if (!this.title.getValue()) {
-                    this.title.setValueState("Error");
-                    this.title.setValueStateText("제목을 입력해주세요.");
-                    this.title.focus(this.title);
-                } else {
-                    this.title.setValueState("None");
-                    this.title.setValueStateText("");
-                }
-
-
-                if (!this.author.getValue()) {
-                    this.author.setValueState("Error");
-                    this.author.setValueStateText("저자를 입력해주세요.");
-                    this.author.focus(this.author);
-                } else {
-                    this.author.setValueState("None");
-                    this.author.setValueStateText("");
-                }
-
-
-                if (!this.stock.getValue()) {
-                    this.stock.setValueState("Error");
-                    this.stock.setValueStateText("재고를 입력해주세요.");
-                    this.stock.focus(this.stock);
-
-                } else {
-                    this.stock.setValueState("None");
-                    this.stock.setValueStateText("");
-                }
-
-
 
                 //데이터 생성을 위해 필요한 값들의 전역 변수 
                 this.Books.ID = this.byId("id").getValue();
@@ -147,8 +179,11 @@ sap.ui.define([
                     "ploat": this.Books.ploat
                 };
                 console.log(BooksData);
-                // 데이터 넣어주기
-                this._insertData(BooksData);
+                if(BooksData.title !== "" && BooksData.stock !== "" && BooksData.ploat !== "" && BooksData.author_ID !== undefined){
+                    // 데이터 넣어주기
+                    this._insertData(BooksData);
+                }
+                
             },
             // 새로운 데이터 등록해주기
             _insertData: function (BooksData) {
@@ -346,27 +381,16 @@ sap.ui.define([
                 this.getView().byId("AuthorsFrag").close();
             },
 
-            onBarSave: function () {
-
-            },
-
-            onBarCancel: function () {
-
-            },
             // Display the button type according to the message with the highest severity
             // The priority of the message types are as follows: Error > Warning > Success > Info
             buttonTypeFormatter: function () {
                 var sHighestSeverityIcon;
-                var aMessages = this.getView().getModel().oData;
-                console.log(aMessages, "버튼타입");
+                var aMessages = this.getView().getModel("popModel").oData;
 
                 aMessages.forEach(function (sMessage) {
                     switch (sMessage.type) {
                         case "Error":
-                            sHighestSeverityIcon = "Critical";
-                            break;
-                        case "Warning":
-                            sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" ? "Critical" : sHighestSeverityIcon;
+                            sHighestSeverityIcon = "Negative";
                             break;
                         case "Success":
                             sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ? "Success" : sHighestSeverityIcon;
@@ -400,7 +424,7 @@ sap.ui.define([
                         break;
                 }
 
-                return this.getView().getModel().oData.reduce(function (iNumberOfMessages, oMessageItem) {
+                return this.getView().getModel("popModel").oData.reduce(function (iNumberOfMessages, oMessageItem) {
                     return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
                 }, 0);
             },
@@ -408,7 +432,7 @@ sap.ui.define([
             // Set the button icon according to the message with the highest severity
             buttonIconFormatter: function () {
                 var sIcon;
-                var aMessages = this.getView().getModel().oData;
+                var aMessages = this.getView().getModel("popModel").oData;
 
                 aMessages.forEach(function (sMessage) {
                     switch (sMessage.type) {

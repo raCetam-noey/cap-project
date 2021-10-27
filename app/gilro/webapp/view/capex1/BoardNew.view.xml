@@ -58,7 +58,7 @@ height="100%">
                                             </VBox>
                                             <VBox width="auto" class="sapUiSmallMargin">
                                                 <Label text="stock" labelFor="P_stock" required="true" />
-                                                <Input id="stock" width="80%" />
+                                                <Input id="stock" width="80%" type="Number"/>
                                             </VBox>
                                         </VBox>
                                         </form:content>
@@ -86,9 +86,9 @@ height="100%">
 			<OverflowToolbar >
             	<Button id="messagePopoverBtn"
                     visible="false"
-					icon="{ path: '/', formatter: '.buttonIconFormatter' }"
-					type="{ path: '/', formatter: '.buttonTypeFormatter' }"
-					text= "{path: '/', formatter: '.highestSeverityMessages' }"
+					icon="{ path: 'popModel>/', formatter: '.buttonIconFormatter' }"
+					type="{ path: 'popModel>/', formatter: '.buttonTypeFormatter' }"
+					text= "{path: 'popModel>/', formatter: '.highestSeverityMessages' }"
 					press=".handleMessagePopoverPress"
 					ariaHasPopup="Dialog"/>
 				<ToolbarSpacer/>
