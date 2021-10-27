@@ -6,118 +6,190 @@ sap.ui.define([
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     'sap/m/MessagePopover',
-	'sap/m/MessageItem',
-	'sap/m/MessageToast',
-    'sap/m/Link',
+    'sap/m/MessageItem',
+    'sap/m/MessageToast',
     "sap/ui/core/ValueState",
     "sap/ui/model/Sorter",
     "sap/ui/core/BusyIndicator",
     "sap/m/MessageBox"
 ],
-   /**
-    * @param {typeof sap.ui.core.mvc.Controller} Controller
-    */
-   function (Controller, RichTextEditor, JSONModel, Fragment, Filter, FilterOperator, MessagePopover, MessageItem, MessageToast, Link, ValueState, Sorter, BusyIndicator, MessageBox) {
+    /**
+     * @param {typeof sap.ui.core.mvc.Controller} Controller
+     */
+    function (Controller, RichTextEditor, JSONModel, Fragment, Filter, FilterOperator, MessagePopover, MessageItem, MessageToast, ValueState, Sorter, BusyIndicator, MessageBox) {
         "use strict";
         var oMessagePopover;
+        var bookSeq;
+        var bookList = [];
+        return Controller.extend("gilro.controller.capex1.BoardNew", {
+            //책 내용들 밀어주기
+            Books: {
+            },
 
-      return Controller.extend("gilro.controller.capex1.BoardNew", {
-         onInit: function () {
+            onInit: function (oEvent) {
 
-            this._getBooksSelect();
 
-            this.inputField1 = this.byId("title");
-            this.inputField2 = this.byId("author");
-            this.inputField3 = this.byId("stock");
-            this.inputField4 = this.byId("pFloat");
+                this._getBooksSelect();
 
-            var oLink = new Link({
-            text: "Show more information",
-            href: "http://sap.com",
-            target: "_blank"
-            });
 
-            var oMessageTemplate = new MessageItem({
-                type: '{type}',
-                title: '{title}',
-                activeTitle: "{active}",
-                description: '{description}',
-                subtitle: '{subtitle}',
-                counter: '{counter}',
-                link: oLink
-            });
 
-            //메세지 팝오버 생성
-            oMessagePopover = new MessagePopover({
-                items: {
-                path: '/',
-                template: oMessageTemplate
-                },
-                activeTitlePress: function () {
-                MessageToast.show('Active title is pressed');
-                }
-            });
 
-            var aMockMessages = [{
-                type: 'Success',
-                title: '제목 입력 완료'
-            }, {
-                type: 'Warning',
-                title: '저자를 제대로 입력해주세요',
-                description: ''
-            },{
-                type: 'Warning',
-                title: '재고를 제대로 입력해주세요',
-                description: ''
-            }, {
-                type: 'Success',
-                title: '줄거리 입력 완료',
-               
-            }];
+                // 유효성 검사에 필요한 값들의 전역변수
+                this.id = this.byId("id");
+                this.title = this.byId("title");
+                this.author = this.byId("author");
+                this.stock = this.byId("stock");
+                this.ploat = this.byId("ploat");
 
-            var oModel = new JSONModel();
-            oModel.setData(aMockMessages);
-            this.getView().setModel(oModel);
-            this.byId("messagePopoverBtn").addDependent(oMessagePopover);
-      
-            }, 
-            
-            onSave: function() {
-            
-            var oButton = this.byId("messagePopoverBtn")
-            oButton.setVisible(true);
 
-            // 인풋 필드 Value Status
-                if(!this.inputField1.getValue()){
-                    this.inputField1.setValueState("Error");
-                    this.inputField1.setValueStateText("제목을 입력해주세요.");
-                    this.inputField1.focus(this.inputField1);
+                var oMessageTemplate = new MessageItem({
+                    type: '{type}',
+                    title: '{title}',
+                });
+
+                //메세지 팝오버 생성
+                oMessagePopover = new MessagePopover({
+                    items: {
+                        path: '/',
+                        template: oMessageTemplate
+                    },
+                    activeTitlePress: function () {
+                        MessageToast.show('Active title is pressed');
+                    }
+                });
+
+                var aMockMessages = [{
+                    type: 'Success',
+                    title: '제목 입력 완료'
+                }, {
+                    type: 'Warning',
+                    title: '저자를 제대로 입력해주세요',
+                    description: ''
+                }, {
+                    type: 'Warning',
+                    title: '재고를 제대로 입력해주세요',
+                    description: ''
+                }, {
+                    type: 'Success',
+                    title: '줄거리 입력 완료',
+
+                }];
+
+                var oModel = new JSONModel();
+                oModel.setData(aMockMessages);
+                this.getView().setModel(oModel);
+                this.byId("messagePopoverBtn").addDependent(oMessagePopover);
+
+
+            },
+
+            onSave: function () {
+
+                var oButton = this.byId("messagePopoverBtn")
+                oButton.setVisible(true);
+
+                // 인풋 필드 Value Status
+                if (!this.title.getValue()) {
+                    this.title.setValueState("Error");
+                    this.title.setValueStateText("제목을 입력해주세요.");
+                    this.title.focus(this.title);
                 } else {
-                    this.inputField1.setValueState("None");
-                    this.inputField1.setValueStateText("");
+                    this.title.setValueState("None");
+                    this.title.setValueStateText("");
                 }
-                
-            
-                if(!this.inputField2.getValue()){
-                    this.inputField2.setValueState("Error");
-                    this.inputField2.setValueStateText("저자를 입력해주세요.");
-                    this.inputField2.focus(this.inputField2);
+
+
+                if (!this.author.getValue()) {
+                    this.author.setValueState("Error");
+                    this.author.setValueStateText("저자를 입력해주세요.");
+                    this.author.focus(this.author);
                 } else {
-                    this.inputField2.setValueState("None");
-                    this.inputField2.setValueStateText("");
+                    this.author.setValueState("None");
+                    this.author.setValueStateText("");
                 }
 
-            
-                if(!this.inputField3.getValue()){
-                    this.inputField3.setValueState("Error");
-                    this.inputField3.setValueStateText("재고를 입력해주세요.");
-                    this.inputField3.focus(this.inputField3);
+
+                if (!this.stock.getValue()) {
+                    this.stock.setValueState("Error");
+                    this.stock.setValueStateText("재고를 입력해주세요.");
+                    this.stock.focus(this.stock);
 
                 } else {
-                    this.inputField3.setValueState("None");
-                    this.inputField3.setValueStateText("");
+                    this.stock.setValueState("None");
+                    this.stock.setValueStateText("");
                 }
 
+
+
+                //데이터 생성을 위해 필요한 값들의 전역 변수 
+                this.Books.ID = this.byId("id").getValue();
+
+                this.Books.title = this.byId("title").getValue();
+
+                this.Books.author = this.byId("author").getValue();
+
+                this.Books.stock = this.byId("stock").getValue();
+
+                this.Books.ploat = this.byId("ploat").getProperty("value");
+
+                this.InsertBooks = this.Books;
+
+                console.log(this.InsertBooks, "입력된 내용들");
+
+                // var BooksData = this.InsertBooks
+
+                // 새롭게 들어가질 데이터들 형식 => 잘 안맞으면 400에러 발생
+                var BooksData = {
+                    "ID": this.Books.ID,
+                    "title": this.Books.title,
+                    "author_ID": this.oID,
+                    "stock": this.Books.stock,
+                    "ploat": this.Books.ploat
+                };
+                console.log(BooksData);
+                // 데이터 넣어주기
+                this._insertData(BooksData);
+            },
+            // 새로운 데이터 등록해주기
+            _insertData: function (BooksData) {
+                MessageBox.confirm("등록하시겠습니까?", {
+                    icon: MessageBox.Icon.CONFIRM,
+                    title: "도서 등록",
+                    action: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    onClose: function (oAction) {
+                        if (oAction === "OK") {
+                            var serverPath = "/catalog/Books"
+                            fetch(`${serverPath}`, {
+                                method: "POST",
+                                body: JSON.stringify(BooksData),
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            }).then((response) => {
+                                if (!response.ok) {
+                                    throw new Error(`${response.status} - ${response.statusText}`)
+                                }
+                                return response.json();
+                            })
+                                .then(() => {
+                                    if (bookList.length > 0) {
+                                        this.onStartUpload(this.InsertBooks);
+                                    }
+                                    this.getOwnerComponent().getRouter().navTo("BoardMain");
+
+                                })
+                                .then((decodedResponse) => {
+                                    console.log("등록이 되었습니다.");
+                                    console.log("decodedResponse", decodedResponse)
+                                    sap.ui.getCore().getMessageManager().removeAllMessages();
+                                    this.getOwnerComponent().getRouter().navTo("BoardMain")
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        }
+                    }.bind(this)
+                })
             },
 
             // 뒤로가기 (메인페이지로 이동)
@@ -126,33 +198,33 @@ sap.ui.define([
                 MessageBox.confirm("돌아가시겠습니까? 작성한 데이터들은 저장되지 않습니다.", {
                     icon: MessageBox.Icon.CONFIRM,
                     action: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
-                    onClose: function(oAction) {
+                    onClose: function (oAction) {
                         if (oAction === "OK") {
                             oButton.setVisible(false);
-                            if (this.inputField1 !== undefined) {
-                                this.inputField1.setValueState("None");
-                                this.inputField1.setValue("");
+                            if (this.title !== undefined) {
+                                this.title.setValueState("None");
+                                this.title.setValue("");
                             }
-                             if (this.inputField2 !== undefined) {
-                                 this.inputField2.setValueState("None");
-                                 this.inputField2.setValue("");
+                            if (this.author !== undefined) {
+                                this.author.setValueState("None");
+                                this.author.setValue("");
                             }
-                              if (this.inputField3 !== undefined) {
-                                  this.inputField3.setValueState("None");
-                                  this.inputField3.setValue("");
+                            if (this.stock !== undefined) {
+                                this.stock.setValueState("None");
+                                this.stock.setValue("");
                             }
-                              if (this.inputField4 !== undefined) {
-                                  console.log(this.inputField4);
-                                  this.inputField4.setValue("");
+                            if (this.ploat !== undefined) {
+                                console.log(this.ploat);
+                                this.ploat.setValue("");
                             }
-                            console.log(this.inputField4);
+                            console.log(this.ploat);
                             this.getOwnerComponent().getRouter().navTo("BoardMain")
                         }
                     }.bind(this)
 
                 })
             },
-            
+
             // InputBox안에 ValueHelp 버튼 누르면 다이얼로그 창 생성
             handleTableSelectDialogPress: function () {
                 var oAuthorModel = new JSONModel()
@@ -165,7 +237,7 @@ sap.ui.define([
             onAuthorDialogOpen: function () {
                 var oView = this.getView();
 
-                if(!this.AuthorsDialog) {
+                if (!this.AuthorsDialog) {
                     this.AuthorsDialog = Fragment.load({
                         id: oView.getId(),
                         name: "gilro.view.fragment.AuthorsSelect",
@@ -175,10 +247,10 @@ sap.ui.define([
                         return oDialog;
                     });
                 }
-                this.AuthorsDialog.then(function(oDialog) {
+                this.AuthorsDialog.then(function (oDialog) {
                     oDialog.open();
 
-                    oDialog.attachAfterOpen(function(){
+                    oDialog.attachAfterOpen(function () {
 
                     });
                 });
@@ -218,23 +290,23 @@ sap.ui.define([
                     // console.log(oAuthorsModel);
                     this.getView().setModel(oAuthorsModel, "AuthorsSelect");
                 })
-              
+
 
             },
 
-              // cds Books 데이터 
-            _getBooksSelect : function(){
+            // cds Books 데이터 
+            _getBooksSelect: function () {
                 var that = this;
                 let BooksPath = "/catalog/Books?$expand=author"
-                this._getData(BooksPath).then((oBooksData) => {                                
+                this._getData(BooksPath).then((oBooksData) => {
                     var oBooksModel = new JSONModel(oBooksData.value)
-                    console.log(oBooksModel);
-                    this.getView().setModel(oBooksModel, "BooksSelect");
 
+                    this.getView().setModel(oBooksModel, "BooksSelect");
+                    console.log(oBooksModel.oData, "BooksSelect");
                     var oBooks = that.getView().getModel("BooksSelect").getProperty("/");
-                    var bookID = Number(oBooks[oBooks.length-1]['ID'])+1;
-                    console.log(bookID, "북아이디");
-                    that.getView().byId("id").setValue(bookID);
+                    this.bookID = Number(oBooks[oBooks.length - 1]['ID']) + 1;
+                    console.log(this.bookID, "북아이디");
+                    that.getView().byId("id").setValue(this.bookID);
                 })
             },
 
@@ -258,7 +330,9 @@ sap.ui.define([
             // 라디오 버튼 클릭 시 실행
             onChaneSelect: function (oEvent) {
                 this.oText = oEvent.getParameters().listItem.getAggregation("cells")[1].getProperty("text");
+                this.oID = oEvent.getParameters().listItem.getAggregation("cells")[0].getProperty("text");
                 console.log(this.oText);
+                console.log(this.oID);
             },
 
             // Dialog의 선택 버튼 클릭 시, 추출한 값을 Input Box에 넣고 창 닫기
@@ -277,7 +351,7 @@ sap.ui.define([
             },
 
             onBarCancel: function () {
-                
+
             },
             // Display the button type according to the message with the highest severity
             // The priority of the message types are as follows: Error > Warning > Success > Info
@@ -295,7 +369,7 @@ sap.ui.define([
                             sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" ? "Critical" : sHighestSeverityIcon;
                             break;
                         case "Success":
-                            sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ?  "Success" : sHighestSeverityIcon;
+                            sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ? "Success" : sHighestSeverityIcon;
                             break;
                         default:
                             sHighestSeverityIcon = !sHighestSeverityIcon ? "Neutral" : sHighestSeverityIcon;
@@ -326,7 +400,7 @@ sap.ui.define([
                         break;
                 }
 
-                return this.getView().getModel().oData.reduce(function(iNumberOfMessages, oMessageItem) {
+                return this.getView().getModel().oData.reduce(function (iNumberOfMessages, oMessageItem) {
                     return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
                 }, 0);
             },
@@ -359,5 +433,5 @@ sap.ui.define([
             handleMessagePopoverPress: function (oEvent) {
                 oMessagePopover.toggle(oEvent.getSource());
             }
-   });
-});
+        });
+    });

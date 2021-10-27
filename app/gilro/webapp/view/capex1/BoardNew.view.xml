@@ -66,7 +66,7 @@ height="100%">
                                     <form:SimpleForm id="NewProjectForm2" editable="true" layout="ResponsiveGridLayout">
                                         <form:content>
                                                 <VBox width="auto" class="sapUiSmallMargin">
-                                                    <rte:RichTextEditor width="90%" height="30rem" id="pFloat" value=""
+                                                    <rte:RichTextEditor width="90%" height="30rem" id="ploat" value=""
                                                                     customToolbar="true" editable="true" editorType="TinyMCE5"
                                                                     beforeEditorInit="onBeforeInit" ready="onReady" useLegacyTheme="true" showGroupClipboard="true"
                                                                     showGroupTextAlign="true" showGroupStructure="true" showGroupInsert="true" 

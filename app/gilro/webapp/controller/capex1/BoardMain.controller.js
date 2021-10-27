@@ -17,7 +17,7 @@ sap.ui.define([
 
         // 라이프 사이클
 		onInit: function () {
-            // console.clear();
+            console.clear();
             console.log(" === BoardMain onInit === ");
             
         //검색 리스트 한번에 띄우기
@@ -46,9 +46,10 @@ sap.ui.define([
             } 
         },
         // 페이지 갱신시 발생하는 이벤트
-        onMyRoutePatternMatched: async function (oEvent) {
-        modules.log("onMyRoutePatternMatched");
-        // _this = this;
+        onMyRoutePatternMatched: async function () {
+        // modules.log("onMyRoutePatternMatched");
+        this._getBooksSelect();
+        console.log("북 데이터 다시 불러오기");
 
         },
 

@@ -32,12 +32,12 @@
                             <m:VBox>
                                 <m:Label text="title :" />
                                 <m:Text text="{Detail>/title}" visible="{=${editModeSwitch>/editMode}}"/>
-                                <m:Input value="{Detail>/title}" visible="{=!${editModeSwitch>/editMode}}"/>
+                                <m:Input id="NewTitle" value="{Detail>/title}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="stock :" />
                                 <m:Text text="{Detail>/stock}" visible="{=${editModeSwitch>/editMode}}"/>
-                                <m:Input value="{Detail>/stock}" visible="{=!${editModeSwitch>/editMode}}"/>
+                                <m:Input id="NewStock" value="{Detail>/stock}" visible="{=!${editModeSwitch>/editMode}}"/>
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
@@ -51,12 +51,12 @@
                             <m:VBox width="100%" >
                                 <m:Label text="author_ID :" />
                                 <m:Text text="{Detail>/author/ID}" visible="{=${editModeSwitch>/editMode}}"/>
-                                <m:Input value="{Detail>/author/ID}" visible="{=!${editModeSwitch>/editMode}}"/>
+                                <m:Input id="NewAuthorID" value="{Detail>/author/ID}" visible="{=!${editModeSwitch>/editMode}}" showValueHelp="true" valueHelpRequest=".handleTableSelectDialogPress" valueHelpOnly="true"/>
                             </m:VBox>
                             <m:VBox>
                                 <m:Label text="author_name :" />
                                 <m:Text text="{Detail>/author/name}" visible="{=${editModeSwitch>/editMode}}"/>
-                                <m:Input value="{Detail>/author/name}" visible="{=!${editModeSwitch>/editMode}}"/>
+                                <m:Input id="NewAuthorName" value="{Detail>/author/name}" visible="{=!${editModeSwitch>/editMode}}" editable="false" />
                             </m:VBox>
                         </form:SimpleForm>
                     </ObjectPageSubSection>
